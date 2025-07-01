@@ -1,13 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity Water Game</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clean Rain Collector</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <h1>Welcome to the Charity Water Game Prototype</h1>
-    <script src="script.js"></script>
+  <div id="start-screen" class="screen">
+    <div class="centered">
+      <h1>Clean Rain Collector</h1>
+      <p>Collect blue raindrops to fill your bucket, but avoid the green ones to stay above 80% purity!</p>
+      <p>Use left and right arrow keys (or swipe on mobile) to move the bucket.</p>
+      <button id="start-button">Start Game</button>
+    </div>
+    <footer>
+      <p>Every score brings someone closer to clean water.<br>Learn more or donate at <a href="https://charitywater.org" target="_blank">charitywater.org</a></p>
+    </footer>
+  </div>
+
+  <div id="game-screen" class="screen hidden">
+    <div id="hud">
+      <span id="score">Water Collected: 0</span>
+      <span id="purity">Purity: 100%</span>
+      <span id="goal">Goal: >80% purity, 10+ drops</span>
+      <span id="timer">30</span>
+    </div>
+    <div id="game-area">
+      <div id="bucket"></div>
+    </div>
+    <footer>
+      <p>Every score brings someone closer to clean water.<br>Learn more or donate at <a href="https://charitywater.org" target="_blank">charitywater.org</a></p>
+    </footer>
+  </div>
+
+  <div id="end-screen" class="screen hidden">
+    <div class="centered">
+      <h2 id="result-message">You Win!</h2>
+      <p id="final-stats"></p>
+      <button id="restart-button">Restart Game</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
