@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- Start Screen -->
   <div id="start-screen" class="screen">
     <div class="centered">
       <h1>Clean Rain Collector</h1>
@@ -19,21 +20,44 @@
     </footer>
   </div>
 
+  <!-- Game Screen -->
   <div id="game-screen" class="screen hidden">
+    <!-- Top right UI: Timer + Pause -->
+    <div id="corner-ui">
+      <div id="timer-circle">30</div>
+      <div id="pause-button">⏸</div>
+    </div>
+
+    <!-- Pause Menu Popup -->
+    <div id="pause-menu" class="hidden">
+      <div class="pause-popup">
+        <h3>Game Paused</h3>
+        <button id="resume-btn">Resume</button>
+        <button id="reset-button">Reset</button>
+        <button id="back-button">Back to Start</button>
+      </div>
+    </div>
+
+    <!-- HUD -->
     <div id="hud">
       <span id="score">Water Collected: 0</span>
       <span id="purity">Purity: 100%</span>
       <span id="goal">Goal: >80% purity, 10+ drops</span>
-      <span id="timer">30</span>
     </div>
+
+    <!-- Game Area -->
     <div id="game-area">
-      <div id="bucket"></div>
+      <div id="cloud-row"></div>
+      <!-- drops will be added here by JS -->
     </div>
+
+    <!-- Footer -->
     <footer>
       <p>Every score brings someone closer to clean water.<br>Learn more or donate at <a href="https://charitywater.org" target="_blank">charitywater.org</a></p>
     </footer>
   </div>
 
+  <!-- End Screen -->
   <div id="end-screen" class="screen hidden">
     <div class="centered">
       <h2 id="result-message">You Win!</h2>
