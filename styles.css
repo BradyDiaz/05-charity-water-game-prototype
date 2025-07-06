@@ -21,7 +21,7 @@ body {
 #start-screen,
 #end-screen {
   display: flex;
-  background-image: url('/img/clouds.jpg');
+  background-image: url('img/clouds.jpg');
   color: white;
 }
 
@@ -241,7 +241,7 @@ footer {
   bottom: 10px;
   width: 60px;
   height: 60px;
-  background-image: url('/img/water-can-transparent.png');
+  background-image: url('img/water-can-transparent.png');
   background-size: contain;
   background-repeat: no-repeat;
   left: 50%;
@@ -258,13 +258,13 @@ footer {
 }
 
 .raindrop.clean {
-  background-image: url('/img/raindrop.png');
+  background-image: url('img/raindrop.png');
   width: 55px;
   height: 55px;
 }
 
 .raindrop.toxic {
-  background-image: url('/img/toxicRain.png');
+  background-image: url('img/toxicRain.png');
 }
 
 /* --- Hidden --- */
