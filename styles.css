@@ -1,11 +1,12 @@
+/* --- Global Styles --- */
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   background-color: #d0eaff;
   overflow: hidden;
-  padding-bottom: 70px; 
 }
 
+/* --- Screens --- */
 .screen {
   display: none;
   flex-direction: column;
@@ -17,12 +18,14 @@ body {
   padding: 2rem;
 }
 
-#start-screen, #end-screen {
+#start-screen,
+#end-screen {
   display: flex;
   background-image: url('/img/clouds.jpg');
   color: white;
 }
 
+/* --- Centered Container --- */
 .centered {
   margin: auto;
   max-width: 600px;
@@ -31,6 +34,7 @@ body {
   border-radius: 12px;
 }
 
+/* --- Buttons --- */
 button {
   background: #a8d8ff;
   color: #003366;
@@ -45,21 +49,21 @@ button:hover {
   background: #7ecfff;
 }
 
-/* Make the footer stick to the bottom and look professional */
+/* --- Footer --- */
 footer {
   width: 100%;
-  min-height: 70px;
-  background: #fff;
+  min-height: 60px;
+  background: #ffffff51;
   border-top: 2px solid #ffe600; /* Charity: Water yellow */
   position: fixed;
   left: 0;
   bottom: 0;
   padding: 0;
   z-index: 100;
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
 }
 
-/* Flexbox for logo and text */
+/* Footer Content */
 .footer-content {
   display: flex;
   align-items: center;
@@ -69,7 +73,7 @@ footer {
   padding: 12px 20px;
 }
 
-/* Logo styling */
+/* Footer Logo */
 .footer-logo {
   height: 48px;
   width: auto;
@@ -77,10 +81,10 @@ footer {
   border-radius: 8px;
   background: #ffe600;
   padding: 4px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
 }
 
-/* Text styling */
+/* Footer Text */
 .footer-text {
   flex: 1;
   color: #222;
@@ -106,11 +110,7 @@ footer {
   background: #0055a5;
 }
 
-/* Add bottom padding to body so content isn't hidden behind footer */
-body {
-  padding-bottom: 70px;
-}
-
+/* --- Game Screen --- */
 #game-screen {
   display: flex;
   flex-direction: column;
@@ -121,21 +121,7 @@ body {
   padding-bottom: 80px;
 }
 
-@media (max-width: 600px) {
-  #game-screen {
-    margin: 0 auto;
-    width: 75%;
-    max-width: 100%;
-    height: 60vh;        /* reasonable height for mobile */
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;  /* center children horizontally */
-    justify-content: flex-start;
-  }
-}
-
-/* HUD bar */
+/* --- HUD Bar --- */
 #hud {
   display: flex;
   justify-content: space-around;
@@ -145,14 +131,7 @@ body {
   font-size: 1rem;
 }
 
-@media (max-width: 600px) {
-  #hud {
-    font-size: 0.8rem; /* smaller font for mobile */
-    padding: 0.5rem;   /* optional: less padding to save space */
-  }
-}
-
-/* New wrapper: game area + timer UI */
+/* --- Game Content Wrapper (gameplay + timer UI) --- */
 #game-content-wrapper {
   display: flex;
   flex-direction: row;
@@ -161,8 +140,10 @@ body {
   gap: 1rem;
   flex: 1;
   padding: 1rem;
+  padding-bottom: 2rem;
 }
 
+/* --- Game Area --- */
 #game-area {
   flex: 1 1 auto;
   min-width: 400px;
@@ -172,19 +153,18 @@ body {
   background: linear-gradient(to bottom, #cceeff, #ffffff);
 }
 
-/* Timer & pause button column */
+/* --- Timer & pause button column --- */
 #corner-ui {
   position: static;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(255,255,255,0.85);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 16px;
-  padding: 1rem 0.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 0.5rem 0.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   width: 50px;
   margin-left: 12px;
-  padding: 0.5rem 0.25rem;
 }
 
 #timer-circle,
@@ -203,13 +183,14 @@ body {
   margin-bottom: 1rem;
 }
 
+/* --- Pause Menu --- */
 #pause-menu {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -229,12 +210,13 @@ body {
   padding: 0.5rem 1rem;
 }
 
+/* --- Cloud Row --- */
 #cloud-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   position: absolute;
-  flex-wrap:nowrap;
+  flex-wrap: nowrap;
   top: 10px;
   left: 0;
   width: 100%;
@@ -253,6 +235,7 @@ body {
   background-color: transparent;
 }
 
+/* --- Bucket --- */
 #bucket {
   position: absolute;
   bottom: 10px;
@@ -265,14 +248,7 @@ body {
   transform: translateX(-50%);
 }
 
-@media (max-width: 600px) {
-  #bucket {
-    left: 50% !important;   /* center horizontally */
-    transform: translateX(-50%) !important;
-  }
-}
-
-
+/* --- Raindrops --- */
 .raindrop {
   position: absolute;
   width: 30px;
@@ -291,15 +267,89 @@ body {
   background-image: url('/img/toxicRain.png');
 }
 
+/* --- Hidden --- */
 .hidden {
   display: none !important;
 }
 
-/* Responsive: stack timer UI under gameplay and switch to row */
+/* --- Splash Animations --- */
+.splash {
+  position: absolute;
+  width: 40px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.8;
+  pointer-events: none;
+  animation: splashFade 0.4s ease-out forwards;
+}
+
+.splash.clean {
+  background: radial-gradient(circle, #00bfff 0%, transparent 70%);
+}
+
+.splash.toxic {
+  background: radial-gradient(circle, #44aa44 0%, transparent 70%);
+}
+
+@keyframes splashFade {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* --- Countdown Overlay --- */
+#countdown-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#countdown {
+  font-size: 4rem;
+  color: white;
+  font-weight: bold;
+}
+
+/* --- MOBILE STYLES (max-width: 600px) --- */
 @media (max-width: 600px) {
+  #game-screen {
+    margin: 0 auto;
+    width: 75%;
+    max-width: 100%;
+    height: 30vh; /* reasonable height for mobile */
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* center children horizontally */
+    justify-content: flex-start;
+  }
+
+  #hud {
+    font-size: 0.8rem; /* smaller font for mobile */
+    padding: 0.5rem;   /* less padding */
+  }
+
   #game-content-wrapper {
     flex-direction: column;
     align-items: center;
+  }
+
+  #bucket {
+    left: 50% !important; /* center horizontally */
+    transform: translateX(-50%) !important;
   }
 
   #corner-ui {
@@ -325,14 +375,19 @@ body {
     width: 75%;
   }
 
+  #footer {
+    height: 10vh;
+  }
+
   .footer-content {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
     padding: 6px 8px; /* Less padding for mobile */
   }
 
   .footer-logo {
-    height: 32px;     /* Smaller logo */
+    height: 32px; /* Smaller logo */
     margin-bottom: 4px;
     margin-right: 0;
     padding: 2px;
@@ -341,51 +396,4 @@ body {
   .footer-text {
     font-size: 0.92rem; /* Slightly smaller text */
   }
-}
-.splash {
-  position: absolute;
-  width: 40px;
-  height: 20px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  opacity: 0.8;
-  pointer-events: none;
-  animation: splashFade 0.4s ease-out forwards;
-}
-
-.splash.clean {
-  background: radial-gradient(circle, #00bfff 0%, transparent 70%);
-}
-.splash.toxic {
-  background: radial-gradient(circle, #44aa44 0%, transparent 70%);
-}
-
-@keyframes splashFade {
-  0% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(1.5);
-    opacity: 0;
-  }
-}
-
-#countdown-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 30;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#countdown {
-  font-size: 4rem;
-  color: white;
-  font-weight: bold;
 }

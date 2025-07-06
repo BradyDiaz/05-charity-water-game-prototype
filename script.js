@@ -228,7 +228,7 @@ function addClouds() {
   cloudRow.innerHTML = "";
   for (let i = 0; i < 8; i++) {
     const cloud = document.createElement("img");
-    cloud.src = 'img/cloud.png';
+    cloud.src = 'img/cloud2.png';
     cloud.classList.add("cloud");
     cloudRow.appendChild(cloud);
   }
