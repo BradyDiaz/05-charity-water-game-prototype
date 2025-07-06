@@ -26,6 +26,9 @@ startBtn.addEventListener("click", startGame);
 restartBtn.addEventListener("click", startGame);
 
 function startGame() {
+  clearInterval(dropInterval);   // ✅ stop extras first
+  clearInterval(gameInterval);   // ✅ stop extras first
+
   startScreen.classList.add("hidden");
   endScreen.classList.add("hidden");
   gameScreen.classList.remove("hidden");
@@ -39,6 +42,8 @@ function startGame() {
 
   document.getElementById("timer-circle").textContent = secondsLeft;
 
+  // Spawn the first raindrop immediately so the game starts right away
+  spawnRaindrop();
   dropInterval = setInterval(spawnRaindrop, 600);
   gameInterval = setInterval(() => {
     secondsLeft--;
@@ -46,6 +51,56 @@ function startGame() {
     if (secondsLeft <= 0) endGame();
   }, 1000);
 }
+
+// Refactored bucket move function for reuse
+function moveBucket(direction) {
+  const moveAmount = 20; // pixels per move
+  const gameAreaWidth = gameArea.offsetWidth;
+  const bucketWidth = bucket.offsetWidth;
+  let left = bucket.offsetLeft;
+
+  if (direction === "left") {
+    left = Math.max(0, left - moveAmount);
+  } else if (direction === "right") {
+    left = Math.min(gameAreaWidth - bucketWidth, left + moveAmount);
+  }
+
+  bucket.style.left = `${left}px`;
+}
+
+// Keyboard controls use the refactored function
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft") {
+    moveBucket("left");
+  } else if (e.key === "ArrowRight") {
+    moveBucket("right");
+  }
+});
+
+// Touch swipe support for mobile devices
+let touchStartX = null;
+
+gameArea.addEventListener("touchstart", (e) => {
+  touchStartX = e.touches[0].clientX;
+});
+
+gameArea.addEventListener("touchend", (e) => {
+  if (touchStartX === null) return;
+  let touchEndX = e.changedTouches[0].clientX;
+  let diffX = touchEndX - touchStartX;
+
+  const swipeThreshold = 30; // minimum distance to count as swipe
+
+  if (diffX > swipeThreshold) {
+    moveBucket("right");
+  } else if (diffX < -swipeThreshold) {
+    moveBucket("left");
+  }
+
+  touchStartX = null;
+});
+
+// --- rest of your original code below ---
 
 // Update spawnRaindrop to track each drop's interval
 function spawnRaindrop() {
@@ -63,12 +118,16 @@ function spawnRaindrop() {
 
   // Create a fall interval for this drop
   let fallInterval = setInterval(() => {
-    let top = parseInt(drop.style.top);
+    let top = parseInt(drop.style.top) || 70;
     if (top > gameArea.offsetHeight - 70) {
       clearInterval(fallInterval);
+      const wasCaught = checkCatch(drop); 
+      if (!wasCaught) {
+        showSplash(drop); // 💧 Only splash if not caught
+     }
+
       // Remove this interval from the active list
       activeFallIntervals = activeFallIntervals.filter(obj => obj.interval !== fallInterval);
-      checkCatch(drop);
       drop.remove();
     } else {
       drop.style.top = `${top + 5}px`;
@@ -92,6 +151,7 @@ function checkCatch(drop) {
     if (drop.classList.contains("clean")) cleanDrops++;
     updateHUD();
   }
+  return caught;
 }
 
 function updateHUD() {
@@ -111,23 +171,12 @@ function endGame() {
 
   resultMessage.textContent = win ? "You Win!" : "Try Again";
   finalStats.textContent = `Final Score: ${totalDrops} drops, Purity: ${purity}%`;
-}
 
-document.addEventListener("keydown", (e) => {
-  const moveAmount = 20; // pixels per key press
-  const gameAreaWidth = gameArea.offsetWidth;
-  const bucketWidth = bucket.offsetWidth;
-  let left = bucket.offsetLeft;
-
-  if (e.key === "ArrowLeft") {
-    left = Math.max(0, left - moveAmount);
-  } else if (e.key === "ArrowRight") {
-    left = Math.min(gameAreaWidth - bucketWidth, left + moveAmount);
+  // 🎉 Trigger confetti if the player wins
+  if (win) {
+    launchConfetti();
   }
-
-  bucket.style.left = `${left}px`;
-});
-
+}
 
 let resetBtn = document.getElementById("reset-button");
 let backBtn = document.getElementById("back-button");
@@ -169,6 +218,8 @@ resumeBtn.addEventListener("click", () => {
 });
 
 function resumeGame() {
+  clearInterval(dropInterval);   // ✅ stop extras first
+  clearInterval(gameInterval);   // ✅ stop extras first
   dropInterval = setInterval(spawnRaindrop, 600);
   gameInterval = setInterval(() => {
     secondsLeft--;
@@ -204,28 +255,6 @@ function resumeAllDrops() {
   });
 }
 
-// Reuse from earlier
-resetBtn.addEventListener("click", () => {
-  pauseMenu.classList.add("hidden");
-  clearInterval(dropInterval);
-  clearInterval(gameInterval);
-  pauseAllDrops(); // Stop all falling drops
-  activeFallIntervals = []; // Clear the list
-  document.querySelectorAll(".raindrop").forEach(drop => drop.remove());
-  startGame();
-});
-
-backBtn.addEventListener("click", () => {
-  pauseMenu.classList.add("hidden");
-  clearInterval(dropInterval);
-  clearInterval(gameInterval);
-  pauseAllDrops(); // Stop all falling drops
-  activeFallIntervals = []; // Clear the list
-  document.querySelectorAll(".raindrop").forEach(drop => drop.remove());
-  gameScreen.classList.add("hidden");
-  startScreen.classList.remove("hidden");
-});
-
 // Add clouds to the top of the game area
 function addClouds() {
   const cloudRow = document.getElementById("cloud-row");
@@ -242,3 +271,50 @@ function addClouds() {
 
 // Call this once when the page loads
 addClouds();
+
+function launchConfetti() {
+  const duration = 2 * 1000;
+  const end = Date.now() + duration;
+
+  (function frame() {
+    confetti({
+      particleCount: 6,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+    });
+    confetti({
+      particleCount: 6,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+    });
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  })();
+}
+
+// splash function 
+function showSplash(drop) {
+  const splash = document.createElement("div");
+  splash.classList.add("splash");
+
+  if (drop.classList.contains("clean")) {
+    splash.classList.add("clean");
+  } else {
+    splash.classList.add("toxic");
+  }
+
+  // Match horizontal position of drop
+  splash.style.left = drop.style.left;
+
+  // Position at bottom
+  splash.style.top = `${gameArea.offsetHeight - 20}px`;
+
+  gameArea.appendChild(splash);
+
+  // Remove splash after animation
+  setTimeout(() => splash.remove(), 400);
+}
