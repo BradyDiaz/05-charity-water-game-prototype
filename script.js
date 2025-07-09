@@ -90,6 +90,30 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+// Touch controls for mobile (swipe left/right to move bucket)
+let touchStartX = null;
+
+document.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 1) {
+    touchStartX = e.touches[0].clientX;
+  }
+});
+
+document.addEventListener("touchend", (e) => {
+  if (touchStartX === null) return;
+  let touchEndX = e.changedTouches[0].clientX;
+  let diffX = touchEndX - touchStartX;
+
+  if (Math.abs(diffX) > 30) {
+    if (diffX > 0) {
+      moveBucket("right");
+    } else {
+      moveBucket("left");
+    }
+  }
+  touchStartX = null;
+});
+
 function spawnRaindrop() {
   const drop = document.createElement("div");
   drop.classList.add("raindrop");
