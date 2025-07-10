@@ -12,7 +12,16 @@
     <div class="centered">
       <h1>Clean Rain Collector</h1>
       <p>Collect blue raindrops to fill your bucket, but avoid the green ones to stay above 80% purity!</p>
-      <p>Use left and right arrow keys (or swipe on mobile) to move the bucket.</p>
+      <p>Use left and right arrow keys (or mobile buttons) to move the bucket.</p>
+      
+      <!-- Difficulty Selector -->
+      <label for="difficulty-select"><strong>Difficulty:</strong></label>
+      <select id="difficulty-select">
+        <option value="normal">Normal</option>
+        <option value="hard">Hard</option>
+        <option value="expert">Expert</option>
+      </select>
+
       <button id="start-button">Start Game</button>
     </div>
   </div>
@@ -22,10 +31,18 @@
     <div id="countdown-overlay" class="hidden">
       <div id="countdown">3</div>
     </div>
+
     <!-- Pause Menu Popup -->
     <div id="pause-menu" class="hidden">
       <div class="pause-popup">
         <h3>Game Paused</h3>
+        <!-- Add this for changing difficulty -->
+        <label for="pause-difficulty-select"><strong>Difficulty:</strong></label>
+        <select id="pause-difficulty-select">
+          <option value="normal">Normal</option>
+          <option value="hard">Hard</option>
+          <option value="expert">Expert</option>
+        </select>
         <button id="resume-btn">Resume</button>
         <button id="reset-button">Reset</button>
         <button id="back-button">Back to Start</button>
@@ -37,6 +54,7 @@
       <span id="score">Water Collected: 0</span>
       <span id="purity">Purity: 100%</span>
       <span id="goal">Goal: >80% purity, 10+ drops</span>
+      <span id="difficulty-label">Mode: Normal</span> <!-- Add this line -->
     </div>
 
     <!-- Game content wrapper: gameplay + timer UI -->
@@ -53,6 +71,11 @@
       </div>
     </div>
 
+    <!-- Mobile Controls -->
+    <div id="mobile-controls" class="mobile-only">
+      <button id="left-btn">⬅️</button>
+      <button id="right-btn">➡️</button>
+    </div>
   </div>
 
   <!-- End Screen -->
@@ -64,12 +87,10 @@
     </div>
   </div>
 
-  <!-- Footer: always visible, outside all screens -->
+  <!-- Footer -->
   <footer>
     <div class="footer-content">
-      <!-- Charity: Water logo on the left -->
       <img src="img/cw_logo.png" alt="Charity: Water Logo" class="footer-logo" />
-      <!-- Text and link on the right -->
       <div class="footer-text">
         <strong>Every score brings someone closer to clean water.</strong><br />
         <span>
