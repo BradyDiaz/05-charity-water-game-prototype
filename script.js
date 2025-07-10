@@ -104,7 +104,7 @@ function moveBucket(direction) {
 function updateHUD() {
   let purity = totalDrops ? Math.round((cleanDrops / totalDrops) * 100) : 100;
   scoreEl.textContent = `Water Collected: ${totalDrops}`;
-  purityEl.textContent = `Purity: ${purity}%`;
+  purityEl.textContent = `${purity}%`;
 }
 
 function startGame() {
@@ -285,7 +285,7 @@ difficultySelect.addEventListener("change", (e) => {
 });
 
 function updateDifficultyLabel() {
-  difficultyLabel.textContent = `Mode: ${currentDifficulty.label}`;
+  difficultyLabel.textContent = `${currentDifficulty.label}`;
   updateGoalLabel();
 }
 
@@ -294,7 +294,7 @@ function pauseAllDrops() {
 }
 
 function updateGoalLabel() {
-  goalLabel.textContent = `Goal: >${currentDifficulty.minPurity}% purity, ${currentDifficulty.minDrops}+ drops`;
+  goalLabel.textContent = `>${currentDifficulty.minPurity}% purity, and ${currentDifficulty.minDrops}+ drops`;
 }
 
 

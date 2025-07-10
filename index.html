@@ -49,25 +49,40 @@
       </div>
     </div>
 
-    <!-- HUD -->
-    <div id="hud">
-      <span id="score">Water Collected: 0</span>
-      <span id="purity">Purity: 100%</span>
-      <span id="goal">Goal: >80% purity, 10+ drops</span>
-      <span id="difficulty-label">Mode: Normal</span> <!-- Add this line -->
-    </div>
-
-    <!-- Game content wrapper: gameplay + timer UI -->
-    <div id="game-content-wrapper">
-      <div id="game-area">
-        <div id="cloud-row"></div>
-        <!-- drops will be added here by JS -->
-        <div id="bucket"></div>
+    <!-- WRAPPER added here to center & align HUD + game content -->
+    <div id="game-wrapper">
+      <!-- HUD -->
+      <div id="hud">
+        <div class="hud-item">
+          <span class="hud-label">Drops</span>
+          <span id="score" class="hud-value">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Purity</span>
+          <span id="purity" class="hud-value">100%</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Goal</span>
+          <span id="goal" class="hud-value">&gt;80% purity, 10+ drops</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Mode</span>
+          <span id="difficulty-label" class="hud-value">Normal</span>
+        </div>
       </div>
 
-      <div id="corner-ui">
-        <div id="timer-circle">30</div>
-        <div id="pause-button">⏸</div>
+      <!-- Game content wrapper: gameplay + timer UI -->
+      <div id="game-content-wrapper">
+        <div id="game-area">
+          <div id="cloud-row"></div>
+          <!-- drops will be added here by JS -->
+          <div id="bucket"></div>
+        </div>
+
+        <div id="corner-ui">
+          <div id="timer-circle">30</div>
+          <div id="pause-button">⏸</div>
+        </div>
       </div>
     </div>
 
