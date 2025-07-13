@@ -67,14 +67,14 @@ footer {
 .footer-content {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  max-width: 900px;
+  max-width: 1130px; /* Match your main content width */
   margin: 0 auto;
   padding: 12px 20px;
+  gap: 3rem; /* optional: space between logo and text */
 }
 
 .footer-logo {
-  height: 48px;
+  height: 60px;
   width: auto;
   margin-right: 18px;
   border-radius: 8px;
@@ -84,9 +84,10 @@ footer {
 }
 
 .footer-text {
+  margin-left: auto;
   flex: 1;
   color: #222;
-  font-size: 1.05rem;
+  font-size: 1.5rem;
   line-height: 1.4;
 }
 

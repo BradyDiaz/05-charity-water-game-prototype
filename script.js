@@ -21,6 +21,8 @@ let difficultyLabel = document.getElementById("difficulty-label");
 let gameActive = false; // Track whether the game is currently running
 let goalLabel = document.getElementById("goal");
 let lobbyVolumeSlider = document.getElementById("lobby-volume-slider");
+let milestoneReminderShown = false; // NEW: flag to show milestone when drop goal is reached
+
 
 
 let totalDrops = 0;
@@ -146,7 +148,7 @@ function startGame() {
   loseSound.currentTime = 0;
   winSound.pause();
   winSound.currentTime = 0;
- 
+
   lobbyMusic.pause();
   lobbyMusic.currentTime = 0;
   lobbyMusic.play();
@@ -154,10 +156,10 @@ function startGame() {
   clearInterval(dropInterval);
   clearInterval(gameInterval);
   warned = false; // RESET warning each game
+  milestoneReminderShown = false; // ✅ Reset milestone flag
 
   // Disable pause button during countdown
   pauseBtn.disabled = true;
-
 
   startScreen.classList.add("hidden");
   endScreen.classList.add("hidden");
@@ -195,7 +197,7 @@ function startGame() {
         secondsLeft--;
         document.getElementById("timer-circle").textContent = secondsLeft;
 
-        // NEW: Show message at 10 seconds once
+        // ⏱️ 10-second warning
         if (secondsLeft === 10 && !warned) {
           showMilestone("10 seconds left! Fill the bucket up fast!");
           warned = true;
@@ -204,7 +206,7 @@ function startGame() {
         if (secondsLeft <= 0) endGame();
       }, 1000);
 
-      // Play background music here when gameplay starts
+      // Play background music
       bgMusic.currentTime = 0;
       bgMusic.play();
     }
@@ -269,7 +271,19 @@ function checkCatch(drop) {
       catchToxicSound.play();
       shineBucket("green");
     }
+
     updateHUD();
+
+    // 🟡 Milestone reminder when required drops hit
+    if (
+      !milestoneReminderShown &&
+      totalDrops === currentDifficulty.minDrops
+    ) {
+      showMilestone(
+        `You've collected ${totalDrops} drops! Keep purity above ${currentDifficulty.minPurity}% to win!`
+      );
+      milestoneReminderShown = true;
+    }
   }
 
   return caught;
@@ -314,6 +328,7 @@ pauseBtn.addEventListener("click", () => {
 
   // Pause music on pause
   bgMusic.pause();
+  lobbyMusic.pause();
 
   pauseDifficultySelect.value = Object.keys(difficulties).find(
     key => difficulties[key] === currentDifficulty
@@ -327,6 +342,7 @@ resumeBtn.addEventListener("click", () => {
 
   // Resume music on resume
   bgMusic.play();
+  lobbyMusic.play();
 });
 
 resetBtn.addEventListener("click", () => {
