@@ -47,10 +47,10 @@ let difficulties = {
 };
 
 const catchSound = new Audio('audio/splash.wav');
-catchSound.volume = 0.2;
+catchSound.volume = 0.15;
 
 const catchToxicSound = new Audio('audio/fart.wav');
-catchToxicSound.volume = 0.2;
+catchToxicSound.volume = 0.10;
 
 // Background rain music — looped and lower volume
 const bgMusic = new Audio('audio/rain.mp3');
@@ -64,10 +64,10 @@ lobbyMusic.volume = 0.15;
 
 // Win and lose sounds
 const winSound = new Audio('audio/hooray.wav');
-winSound.volume = 0.6;
+winSound.volume = 0.4;
 
 const loseSound = new Audio('audio/boo.wav');
-loseSound.volume = 0.6;
+loseSound.volume = 0.4;
 
 function addClouds() {
   const cloudRow = document.getElementById("cloud-row");
@@ -321,6 +321,7 @@ function endGame() {
 }
 
 pauseBtn.addEventListener("click", () => {
+  if (pauseBtn.disabled) return; // Ignore clicks if disabled
   clearInterval(gameInterval);
   clearInterval(dropInterval);
   pauseAllDrops();
