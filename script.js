@@ -20,6 +20,7 @@ let difficultySelect = document.getElementById("difficulty-select");
 let difficultyLabel = document.getElementById("difficulty-label");
 let gameActive = false; // Track whether the game is currently running
 let goalLabel = document.getElementById("goal");
+let lobbyVolumeSlider = document.getElementById("lobby-volume-slider");
 
 
 let totalDrops = 0;
@@ -28,6 +29,7 @@ let gameInterval;
 let dropInterval;
 let secondsLeft = 30;
 let activeFallIntervals = [];
+let warned = false; // NEW: flag for 10 seconds message
 
 let currentDifficulty = {
   minDrops: 10,
@@ -36,17 +38,34 @@ let currentDifficulty = {
   label: "Normal"
 };
 
-const difficulties = {
+let difficulties = {
   normal: { minDrops: 10, minPurity: 80, toxicChance: 0.2, label: "Normal" },
-  hard: { minDrops: 15, minPurity: 90, toxicChance: 0.35, label: "Hard" },
+  hard: { minDrops: 15, minPurity: 90, toxicChance: 0.4, label: "Hard" },
   expert: { minDrops: 20, minPurity: 100, toxicChance: 0.5, label: "Expert" }
 };
 
 const catchSound = new Audio('audio/splash.wav');
-catchSound.volume = 0.4;
+catchSound.volume = 0.2;
 
 const catchToxicSound = new Audio('audio/fart.wav');
-catchToxicSound.volume = 0.4;
+catchToxicSound.volume = 0.2;
+
+// Background rain music — looped and lower volume
+const bgMusic = new Audio('audio/rain.mp3');
+bgMusic.loop = true;
+bgMusic.volume = 0.15;
+
+// Lobby music for start screen
+const lobbyMusic = new Audio('audio/lobby.mp3');
+lobbyMusic.loop = true;
+lobbyMusic.volume = 0.15;
+
+// Win and lose sounds
+const winSound = new Audio('audio/hooray.wav');
+winSound.volume = 0.6;
+
+const loseSound = new Audio('audio/boo.wav');
+loseSound.volume = 0.6;
 
 function addClouds() {
   const cloudRow = document.getElementById("cloud-row");
@@ -79,10 +98,13 @@ document.addEventListener("keydown", (e) => {
 });
 
 function shineBucket(color = "yellow") {
-  bucket.style.boxShadow = `0 0 15px 8px ${color}`;
+  const bucketImg = document.getElementById("bucket-img");
+  const colorClass = `glow-${color}`;
+  bucketImg.classList.add("shine", colorClass);
+
   setTimeout(() => {
-    bucket.style.boxShadow = "";
-  }, 300);
+    bucketImg.classList.remove("shine", colorClass);
+  }, 600);
 }
 
 function moveBucket(direction) {
@@ -107,12 +129,35 @@ function updateHUD() {
   purityEl.textContent = `${purity}%`;
 }
 
+function showMilestone(message) {
+  const milestoneEl = document.getElementById("milestone-message");
+  if (!milestoneEl) return; // in case it's missing in HTML
+
+  milestoneEl.textContent = message;
+  milestoneEl.style.display = "block";
+
+  setTimeout(() => {
+    milestoneEl.style.display = "none";
+  }, 3000);
+}
+
 function startGame() {
+  loseSound.pause();
+  loseSound.currentTime = 0;
+  winSound.pause();
+  winSound.currentTime = 0;
+ 
+  lobbyMusic.pause();
+  lobbyMusic.currentTime = 0;
+  lobbyMusic.play();
+
   clearInterval(dropInterval);
   clearInterval(gameInterval);
+  warned = false; // RESET warning each game
 
   // Disable pause button during countdown
   pauseBtn.disabled = true;
+
 
   startScreen.classList.add("hidden");
   endScreen.classList.add("hidden");
@@ -149,8 +194,19 @@ function startGame() {
       gameInterval = setInterval(() => {
         secondsLeft--;
         document.getElementById("timer-circle").textContent = secondsLeft;
+
+        // NEW: Show message at 10 seconds once
+        if (secondsLeft === 10 && !warned) {
+          showMilestone("10 seconds left! Fill the bucket up fast!");
+          warned = true;
+        }
+
         if (secondsLeft <= 0) endGame();
       }, 1000);
+
+      // Play background music here when gameplay starts
+      bgMusic.currentTime = 0;
+      bgMusic.play();
     }
   }, 1000);
 
@@ -207,11 +263,11 @@ function checkCatch(drop) {
       cleanDrops++;
       catchSound.currentTime = 0;
       catchSound.play();
-      shineBucket("yellow");
+      shineBucket("blue");
     } else {
       catchToxicSound.currentTime = 0;
       catchToxicSound.play();
-      shineBucket("limegreen");
+      shineBucket("green");
     }
     updateHUD();
   }
@@ -225,8 +281,13 @@ function endGame() {
   gameScreen.classList.add("hidden");
   endScreen.classList.remove("hidden");
 
+
   // Disable pause button when game ends
   pauseBtn.disabled = true;
+
+  // Pause background music on game end
+  bgMusic.pause();
+  lobbyMusic.pause();
 
   const purity = totalDrops ? Math.round((cleanDrops / totalDrops) * 100) : 100;
   const win = purity >= currentDifficulty.minPurity && totalDrops >= currentDifficulty.minDrops;
@@ -234,7 +295,15 @@ function endGame() {
   resultMessage.textContent = win ? "You Win!" : "Try Again";
   finalStats.textContent = `Final Score: ${totalDrops} drops, Purity: ${purity}% (${currentDifficulty.label} Mode)`;
 
-  if (win) launchConfetti();
+  // Play win or lose sound accordingly
+  if (win) {
+    winSound.currentTime = 0;
+    winSound.play();
+    launchConfetti();
+  } else {
+    loseSound.currentTime = 0;
+    loseSound.play();
+  }
 }
 
 pauseBtn.addEventListener("click", () => {
@@ -242,6 +311,9 @@ pauseBtn.addEventListener("click", () => {
   clearInterval(dropInterval);
   pauseAllDrops();
   pauseMenu.classList.remove("hidden");
+
+  // Pause music on pause
+  bgMusic.pause();
 
   pauseDifficultySelect.value = Object.keys(difficulties).find(
     key => difficulties[key] === currentDifficulty
@@ -252,6 +324,9 @@ resumeBtn.addEventListener("click", () => {
   pauseMenu.classList.add("hidden");
   resumeGame();
   resumeAllDrops();
+
+  // Resume music on resume
+  bgMusic.play();
 });
 
 resetBtn.addEventListener("click", () => {
@@ -267,6 +342,12 @@ backBtn.addEventListener("click", () => {
   document.querySelectorAll(".raindrop").forEach(drop => drop.remove());
   gameScreen.classList.add("hidden");
   startScreen.classList.remove("hidden");
+
+  // Stop game music and start lobby music on back to start screen
+  bgMusic.pause();
+  bgMusic.currentTime = 0;
+  lobbyMusic.currentTime = 0;
+  lobbyMusic.play();
 });
 
 pauseDifficultySelect.addEventListener("change", (e) => {
@@ -296,7 +377,6 @@ function pauseAllDrops() {
 function updateGoalLabel() {
   goalLabel.textContent = `>${currentDifficulty.minPurity}% purity, and ${currentDifficulty.minDrops}+ drops`;
 }
-
 
 function resumeAllDrops() {
   const oldDrops = document.querySelectorAll(".raindrop");
@@ -332,9 +412,35 @@ function resumeGame() {
   gameInterval = setInterval(() => {
     secondsLeft--;
     document.getElementById("timer-circle").textContent = secondsLeft;
+
+    // Show 10 second warning here too to handle resume scenario
+    if (secondsLeft === 10 && !warned) {
+      showMilestone("10 seconds left! Fill the bucket up fast!");
+      warned = true;
+    }
+
     if (secondsLeft <= 0) endGame();
   }, 1000);
 }
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    if (gameScreen && !pauseMenu.classList.contains("hidden")) return;
+
+    clearInterval(gameInterval);
+    clearInterval(dropInterval);
+    pauseAllDrops();
+    pauseMenu.classList.remove("hidden");
+    pauseBtn.disabled = false;
+
+    // Pause music on tab change (hidden)
+    bgMusic.pause();
+  }
+});
+
+lobbyVolumeSlider.addEventListener("input", (e) => {
+  lobbyMusic.volume = e.target.value;
+});
 
 // === Touch Controls ===
 let touchStartX = null;

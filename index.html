@@ -31,6 +31,17 @@
     <div id="countdown-overlay" class="hidden">
       <div id="countdown">3</div>
     </div>
+    <div id="milestone-message" style="
+    position: absolute; 
+    top: 20%; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    font-size: 2rem; 
+    color: yellow; 
+    text-shadow: 0 0 6px #000; 
+    display: none; 
+    z-index: 50;
+  "></div>
 
     <!-- Pause Menu Popup -->
     <div id="pause-menu" class="hidden">
@@ -46,6 +57,11 @@
         <button id="resume-btn">Resume</button>
         <button id="reset-button">Reset</button>
         <button id="back-button">Back to Start</button>
+        
+        <div id="lobby-volume-control" style="margin-top: 1em;">
+            <label for="lobby-volume-slider">Lobby Music Volume:</label>
+            <input type="range" id="lobby-volume-slider" min="0" max="1" step="0.01" value="0.2" />
+        </div>
       </div>
     </div>
 
@@ -76,7 +92,9 @@
         <div id="game-area">
           <div id="cloud-row"></div>
           <!-- drops will be added here by JS -->
-          <div id="bucket"></div>
+          <div id="bucket">
+            <img src="img/water-can-transparent.png" alt="Bucket" id="bucket-img" />
+          </div>
         </div>
 
         <div id="corner-ui">
